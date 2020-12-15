@@ -1,0 +1,270 @@
+%% PRÉAMBULE : PACKAGES début
+\usepackage[dvipsnames]{xcolor}
+\usepackage[a4paper,textwidth=15cm]{geometry}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage[Bjornstrup]{fncychap}
+%\usepackage[title,toc,page,header]{appendix} % REDONDANT VOIRE CONTRADICTOIRE AVEC these_main => en outre les options ne fonctionnent que dans un environnement appendices
+
+
+\usepackage{wrapfig}
+\usepackage[export]{adjustbox}
+\usepackage{outlines}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{here} %À ÉVITER, IL FAUT LAISSER LATEX PLACER LES FIGURES
+\usepackage{libertine}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathrsfs} % POURQUOI NE PAS UTILISER \mathcal (standard) ?
+\usepackage{pifont}
+%\usepackage{nicefrac}		% INUTILE ?!
+%\usepackage{mathtools}	        % INUTILE ?!
+\usepackage[left,modulo,mathlines]{lineno} % après AMS + cf. patch ci-dessous
+\usepackage[round,authoryear]{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english,french]{babel}
+\usepackage[bookmarks={true},bookmarksopen={true},pdfusetitle]{hyperref}
+%\usepackage{footnotebackref} % NE FONCTIONNE PAS (?)
+\usepackage{caption} % après babel, avant minitoc
+\usepackage[francais]{minitoc} % après hyperref
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[acronym,nomain,ucmark,automake]{glossaries}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{tikz}
+\usepackage{etoolbox} %pour patch lineno
+%% PRÉAMBULE : PACKAGES fin
+
+
+
+%% PRÉAMBULE : STYLE (début)
+
+%% Format titre
+\makeatletter
+\renewcommand{\maketitle}{
+  \bgroup
+  \setlength{\parindent}{0pt}
+  \begin{flushleft}
+    {\Large \@title}
+    \par\medskip
+    \textbf{\@author}
+    \par\medskip
+    {\footnotesize \@date}
+  \end{flushleft}
+  \egroup
+}
+
+
+\makeatother
+
+%% FORMAT PAGE
+\geometry{left=3cm,top=2.5cm,bottom=2.5cm,headheight=0.7cm,headsep=1cm,footskip=1.25cm}
+\addtolength{\skip\footins}{0.8\baselineskip} %extra skip before footnotes
+\setlength{\footnotesep}{.5\baselineskip} %extra skip between footnotes
+\usepackage[Bjornstrup]{fncychap}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+%% HEAD & FOOT
+%% Pour faire plus "fancy", exemple ci-dessous :
+%% - pages "plain" i.e. début chapitre, page de titre : juste numéro de
+%% page au centre en bas ;
+%% - pages normales, recto, en haut : numéro et titre section à gauche,
+%% numéro de page à droite ; rien en bas ;
+%% - pages normales, verso, en haut : numéro de page à gauche, numéro et
+%% titre chapitre à droite ; rien en bas ;
+%% numéros de page en gras, titres en oblique.
+%%
+\pagestyle{fancyplain}
+%Head and foot definition:
+%\position[\fancyplain{plain verso}{verso}]{\fancyplain{plain recto}{recto}}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}} %left:chap+no# right:nothing
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}} %right:sec+#
+\lhead[\fancyplain{}{\bf\thepage}]{\fancyplain{}{\sl\rightmark}}
+\rhead[\fancyplain{}{\sl\leftmark}]{\fancyplain{}{\bf\thepage}}
+\cfoot[\fancyplain{\bf\thepage}{}]{\fancyplain{\bf\thepage}{}}
+\chead{}\lfoot{}\rfoot{}
+\addtolength{\headwidth}{7mm} %head expands on the outside
+
+%% Pour que les chapitres commencent sur une page recto et que la page
+%% verso blanche éventuelle soit de style plain ou vide :
+\newcommand{\recto}{\newpage{\pagestyle{plain}\cleardoublepage}}
+\newcommand{\rectovide}{\newpage{\pagestyle{empty}\cleardoublepage}}
+
+\doublehyphendemerits=10000       % No consecutive line hyphens.
+\brokenpenalty=10000              % No broken words across columns/pages.
+\widowpenalty=9999                % Almost no widows at bottom of page.
+\clubpenalty=9999                 % Almost no orphans at top of page.
+\interfootnotelinepenalty=9999    % Almost never break footnotes.
+\raggedbottom %Page non étirée pour placer la dernière ligne en bas de page
+
+
+%% TABLES DES MATIÈRES
+\setcounter{tocdepth}{3} %profondeur de la table des matières (3: -> subsubsection)
+%\renewcommand{\contentsname}{Table des matières}
+%\renewcommand{\listfigurename}{Liste des figures}
+%\renewcommand{\listtablename}{Liste des tables}
+%% Mini tables dans chaque chapitre
+%\def\mtctitle{Contenu} %titre des minitoc
+\setcounter{minitocdepth}{3} %profondeur de la minitoc (3: -> subsubsection)
+
+%\usepackage{mtcoff} %annule proprement toutes les minitoc
+
+%% ANNEXES
+\AtBeginEnvironment{appendices}{\crefalias{section}{appendix}}
+\Crefname{appendix}{l'Annexe}{les Annexes}
+\Crefname{subappendix}{l'Annexe}{les Annexes}
+\AtBeginDocument{%
+  \def\subappendixautorefname{l'Annexe}
+}
+
+%% SECTIONS
+\setcounter{secnumdepth}{3} %profondeur de numérotation (3: -> subsubsection)
+%\renewcommand{\thechapter}{\Roman{chapter}} %nombres romains pour chapitres
+
+%% SUBSUBSECTIONS
+\renewcommand{\thesubsubsection}{\alph{subsubsection})} %lowercase letters
+
+%% BIBLIOGRAPHIE
+%\renewcommand{\bibname}{Bibliographie}
+
+%% FLOATS = FIGURES & TABLES
+\DeclareGraphicsExtensions{.pdf,.jpg,.png,.eps}
+\graphicspath{{./Figures/PageTitre/}{./Figures/Chapitre1/}{./Figures/Chapitre2/}{./Figures/Chapitre3/}{./Figures/Chapitre4/}{./Figures/Chapitre5/}{./Figures/Annexes1/}}
+
+%% Page fractions for floats
+\renewcommand{\topfraction}{.7}       %default .7
+\renewcommand{\bottomfraction}{.7}    %default .3
+\renewcommand{\textfraction}{.2}      %default .2
+\renewcommand{\floatpagefraction}{.5} %default .5
+%% Distances between floats and text
+\setlength{\floatsep}{2em}            %default 12pt float-float
+\setlength{\textfloatsep}{\floatsep}  %default 18pt float[tb]-text
+\setlength{\intextsep}{\floatsep}     %default \floatsep text-float-text
+
+%\renewcommand{\tablename}{Tableau}
+%\renewcommand{\figurename}{Figure}
+%\def\figureautorefname{\figurename}
+%\def\tableautorefname{\tablename}
+\captionsetup{labelfont={bf}}
+
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}} % paragraphe centré
+\renewcommand{\arraystretch}{1.5}
+
+%% EQUATIONS
+%\renewcommand{\theequation}{Eqn~\arabic{equation}}
+
+
+\renewcommand{\theequation}{Eqn~\thechapter.\arabic{equation}}
+
+%% COULEURS
+\definecolor{navyblue}{rgb}{0.0, 0.0, 0.5}
+\definecolor{shadecolor}{gray}{0.90}
+\colorlet{mylinkcolor}{RoyalBlue}
+
+%% LIENS
+\hypersetup{colorlinks=true, allcolors=mylinkcolor}
+
+%% GLOSSAIRES
+\makeglossaries
+\loadglsentries{Glossaire} %fichier externe
+%% No colors for glossary links:
+\renewcommand*{\glsdohyperlink}[2]{%
+ {\hypersetup{linkcolor=RoyalBlue}\hyperlink{#1}{#2}}}
+\glsenablehyper
+
+%% PATCH pour compatibilité lineno & amsmath
+%% Patch 'normal' math environment: 
+\newcommand*\linenomathpatch[1]{%
+  \expandafter\pretocmd\csname #1\endcsname {\linenomath}{}{}%
+  \expandafter\pretocmd\csname #1*\endcsname{\linenomath}{}{}%
+  \expandafter\apptocmd\csname end#1\endcsname {\endlinenomath}{}{}%
+  \expandafter\apptocmd\csname end#1*\endcsname{\endlinenomath}{}{}%
+}
+%% Patch AMS math environment:
+\newcommand*\linenomathpatchAMS[1]{%
+  \expandafter\pretocmd\csname #1\endcsname {\linenomathAMS}{}{}%
+  \expandafter\pretocmd\csname #1*\endcsname{\linenomathAMS}{}{}%
+  \expandafter\apptocmd\csname end#1\endcsname {\endlinenomath}{}{}%
+  \expandafter\apptocmd\csname end#1*\endcsname{\endlinenomath}{}{}%
+}
+%% Definition of \linenomathAMS depends on whether the mathlines option is provided
+\expandafter\ifx\linenomath\linenomathWithnumbers
+  \let\linenomathAMS\linenomathWithnumbers
+  %% The following line gets rid of an extra line numbers at the bottom:
+  \patchcmd\linenomathAMS{\advance\postdisplaypenalty\linenopenalty}{}{}{} 
+\else
+  \let\linenomathAMS\linenomathNonumbers
+\fi
+\linenomathpatch{equation}
+\linenomathpatchAMS{gather}
+\linenomathpatchAMS{multline}
+\linenomathpatchAMS{align}
+\linenomathpatchAMS{alignat}
+\linenomathpatchAMS{flalign}
+
+
+%% PRÉAMBULE : STYLE (fin)
+
+
+
+%% ENVIRONNEMENTS & COMMANDES
+%% à définir ci-dessous 
+
+%% ENCADRE début
+\newcommand{\titreencadre}{Titre}
+\mdfsetup{skipabove=\topskip,skipbelow=\topskip}
+\tikzset{titreblue/.style =
+  {draw=RoyalBlue, line width=1.5pt, fill=white,
+    rectangle, rounded corners, right,minimum height=2em}}
+\makeatletter
+\mdfdefinestyle{encadrestyle2}{%
+  linewidth=1.5pt,roundcorner=5pt,linecolor=RoyalBlue,
+  apptotikzsetting={\tikzset{mdfbackground/.append style ={%
+        fill=gray!20}}},
+  frametitlefont=\bfseries,
+  singleextra={%
+    \node[titreblue,xshift=2em] at (P-|O) %
+    {~\mdf@frametitlefont{\titreencadre}\hbox{~}};},
+  firstextra={%
+    \node[titreblue,xshift=2em] at (P-|O) %
+    {~\mdf@frametitlefont{\titreencadre}\hbox{~}};},
+}
+\newenvironment{encadre2}[1]{%
+  %\nolinenumbers %patch ST pour éviter des sauts de pages mal placés
+  \renewcommand{\titreencadre}{#1}
+  \protected@edef\@currentlabelname{#1}
+  \protected@edef\@currentlabel{#1}
+  \begin{mdframed}[style=encadrestyle2,nobreak=true]
+    \vspace{0.75\baselineskip}
+    \begin{internallinenumbers}%patch ST pour numéroter les lignes des encadrés
+    }{%
+    \end{internallinenumbers}%patch ST
+  \end{mdframed}
+}
+\makeatother
+%% ENCADRE fin
+
+
+
+%% Mise en forme du texte pour les unités        
+%\usepackage{xspace}
+\usepackage[load-configurations = abbreviations]{siunitx}
+	\DeclareSIUnit{\MPa}{\mega\pascal}
+	\DeclareSIUnit{\micron}{\micro\meter}
+	\DeclareSIUnit{\tr}{tr}
+	\DeclareSIPostPower\totheM{m}
+	\sisetup{
+   	locale = FR,
+	  inter-unit-separator=$\cdot$,
+	  range-phrase=~\`{a}~,     	% Utilise le tiret court pour dire "de... à"
+	  range-units=single,  		% Cache l'unité sur la première borne
+	  }
+
+
+
+
