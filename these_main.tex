@@ -1,0 +1,209 @@
+\documentclass[12pt,twoside,openright,jobname]{report}
+
+
+% Nom des chapitres à compiler (sans .tex)
+\includeonly{these_titre, these_merci, these_resume,these_chapitre1,these_chapitre2,
+these_chapitre3,these_chapitre4, these_conclusion,  these_annexe_article, these_annexe_experimentation, annexe_conclusion, these_resume}
+%
+\input{these_format}
+
+%% Espacement des lignes \singlespacing \onehalfspacing  \doublespacing
+
+\hypersetup{
+  pdfauthor={Samuel Nilusmas},
+  pdftitle={Samuel Nilusmas - Thèse de doctorat - Modélisation du déploiement de variétés résistantes}, %POURQUOI PAS...
+  pdfsubject={Gestion durable des nématodes à galles en culture maraîchère par la modélisation et l’optimisation du déploiement de variétés résistantes},
+  pdfcreator={TeX}, 
+  pdfproducer={pdfTeX},
+  pdfkeywords={dynamique des populations, modèle mathématique, optimisation, protection des cultures, nématodes phytoparasites, durabilité des résistances variétales}, %À COMPLÉTER
+}
+ %sans .tex
+ \usepackage{ifpdf}
+
+
+
+\pdfinfo {
+	/Author (skqjd)
+	/Title (Titre du document)
+	/Subject (Titre du document)
+	/Keywords (sdfpkospof)
+	/CreationDate (D:20090129171524)
+}
+
+ 
+
+%\renewcommand\thechapter{\arabic{chapter}}
+%\usepackage[rightcaption]{sidecap}
+
+
+
+
+%\input{Pagedegarde}
+%
+%\author{Samuel \textsc{Nilusmas}}
+%\title{Gestion durable des nématodes à galles 
+%en culture maraîchère par la modélisation et 
+%l’optimisation du déploiement de variétés
+% résistantes }
+%\ED{\'{E}cole doctorale \no 84 : Sciences et Technologies de l’Information et de la Communication }
+%\specialite{Automatique,
+%Traitement du Signal et des Images}
+%\directricea{ Suzanne \textsc{Touzeau} }
+%\directriceb{Caroline 	\textsc{Djian-Caporalino} }
+%\encadranta{Vincent \textsc{Calcagno}}
+%\encadrantb{Ludovic \textsc{Mailleret}}
+%\date{10 décembre 2020}
+%\jurya{M. Ivan Sache}{Professeur, AgroParisTech}{Rapporteur}
+%\juryb{M. Gaël Thébaud}{Chargé de Recherche, UMR BGPI, CIRAD/INRAE/SUPAGRO}{Rapporteur}
+%\juryc{M. Pierre Abad }{Directeur de recherche, UMR ISA, INRAE/UCA/CNRS}{Examinateur}
+%\juryd{Mme Florence Carpentier}{Maître de conférence, AgroParisTech}{Examinatrice}
+%\jurye{Mme Suzanne Touzeau}{Chargée de recherche, UMR ISA \& BIOCORE, INRIA}{Directrice}
+%\juryf{M. Ludovic Mailleret}{Directeur de recherche, UMR ISA \& BIOCORE, INRIA}{Encadrant}
+%\juryg{Mme Caroline Djian-Caporalino}{Ingénieur de recherche, UMR ISA, INRAE/UCA/CNRS}{Invitée}
+%\juryh{M. Vincent Calcagno}{Chargé de recherche, UMR ISA, INRAE/UCA/CNRS}{Invité}
+%\ecole{l'Université Côte d'Azur}
+%
+
+\begin{document}
+
+
+%% ENTÊTE
+\pagenumbering{roman}
+
+%% Page de garde
+\thispagestyle{empty}
+\newgeometry{margin=0cm,nohead,nofoot} % pas de marges
+\pdfbookmark[0]{Page de garde}{garde}
+\includepdf[noautoscale=true]{modele_couv_these_STIC_V1.pdf}
+\restoregeometry
+
+%% Page de titre
+
+\rectovide
+\pdfbookmark[0]{Titre}{titre}
+\include{these_titre}
+%%RÉSUMÉS
+
+\newgeometry{top=1.3cm, bottom=1.5cm, left=2.36cm, right=2.36cm}
+\recto
+{\setlength{\baselineskip}{1\baselineskip}
+\phantomsection
+\addstarredpart{Résumés}
+\newpage{\thispagestyle{empty}}
+\include{these_resume} %sans .tex
+ }
+\restoregeometry
+
+%% Remerciements
+
+\recto
+\phantomsection
+\addstarredchapter{Remerciements}
+\markboth{Remerciements}{Remerciements}
+\include{these_merci}
+
+\newpage{\thispagestyle{empty}}
+\onehalfspacing
+%% Tables
+\setcounter{tocdepth}{1}
+
+%% Table des matières par chapitre (minitoc)
+\mtcsetoffset{minitoc}{-0.875em}
+\setlength{\mtcindent}{-0.875em} 
+\dominitoc
+%\faketableofcontents  %uniquement des table des matières par chapitre
+
+%% Table des matières générale (toc)
+\recto
+\phantomsection
+\addstarredchapter{\contentsname}
+\markboth{\listfigurename}{\contentsname}
+\tableofcontents \mtcaddchapter
+%\adjustmtc
+
+%% Liste des figures (lof)
+{\recto
+\phantomsection
+\hypersetup{linkcolor=black}
+\renewcommand*\listfigurename{Liste des figures}
+\addstarredchapter{\listfigurename}
+\listoffigures}
+
+%%  Liste des tableaux (lot)
+{\recto
+\phantomsection
+\hypersetup{linkcolor=black}
+\addstarredchapter{\listtablename}
+\markboth{\listtablename}{\listtablename}
+\listoftables}
+
+%% Liste des abréviations et acronymes
+\recto
+\phantomsection
+\addstarredchapter{Liste des abréviations et acronymes}
+\printglossary[type=\acronymtype, title={Liste des abréviations et acronymes},style=super]
+
+
+%% CORPS DU MÉMOIRE
+\recto
+\pagenumbering{arabic}
+\setcounter{mtc}{5}	% "Corrige" les minitocs décallés à cause des chapter* (ex : table des matières)
+
+%% Numérotation des lignes
+\linenumbers
+
+%% Chapitre
+
+
+\selectlanguage{french} %ou english
+\renewcommand{\tablename}{Tableau}
+\renewcommand{\figurename}{Figure}
+
+\include{these_chapitre1} %sans .tex
+
+\include{these_chapitre2} %sans .tex
+
+\include{these_chapitre3} %sans .tex
+
+\include{these_chapitre4} %sans .tex
+
+\include{these_conclusion} %sans .tex
+%% Etc.
+
+%% BIBLIOGRAPHIE
+
+
+\selectlanguage{french} %ou english
+\recto
+\phantomsection
+\addstarredchapter{\bibname}
+\markboth{\bibname}{\bibname}
+%\bibliographystyle{apa-good_ST} %style biblio sans .bst
+\bibliographystyle{newphy} %style biblio sans .bst
+\singlespacing
+\bibliography{these_biblio} %fichiers de la bibliographie (sans . bib)
+
+
+
+%% ANNEXES
+\appendix
+\recto
+\phantomsection
+\addstarredpart{Annexes}
+\part*{Annexes}
+
+%% Annexe
+
+\recto
+
+\include{these_annexe_article}
+\include{these_annexe_experimentation}
+\include{annexe_conclusion} %sans .tex
+
+\newpage{\thispagestyle{empty}}
+%% Etc.
+
+
+
+
+\end{document}
